@@ -1,8 +1,9 @@
-// ==========================================
-// 1. ESTADO GLOBAL (ANONIMATO, CARRITO Y WISHLIST)
-// ==========================================
-let currentUserRole = 'guest'; 
-let currentAlias = 'Invitado'; 
+// =============================================================================
+// 1. CONFIGURACIÓN Y ESTADO GLOBAL
+// =============================================================================
+
+let currentUserRole = 'guest';
+let currentAlias = 'Invitado';
 let cart = JSON.parse(localStorage.getItem('pd_cart_cop')) || [];
 let wishlist = JSON.parse(localStorage.getItem('pd_wishlist')) || [];
 let categoriaActual = 'todos';
@@ -36,48 +37,57 @@ const defaultProducts = [
 
 let products = JSON.parse(localStorage.getItem('pd_products_cop')) || defaultProducts;
 
-// ==========================================
-// 2. INICIALIZACIÓN Y EVENTOS
-// ==========================================
+// =============================================================================
+// 2. CICLO DE VIDA Y EVENTOS INICIALES
+// =============================================================================
+
 window.onbeforeunload = function () {
     window.scrollTo(0, 0);
 };
 
 document.addEventListener('DOMContentLoaded', () => {
     window.scrollTo(0, 0);
+
     // Verificación de edad al cargar
     if (!sessionStorage.getItem('isAdultVerified')) {
         document.getElementById('ageModal').classList.add('active');
-        document.body.classList.add('no-scroll'); 
+        document.body.classList.add('no-scroll');
     }
-    
-    renderProducts(products); 
+
+    renderProducts(products);
     actualizarCarritoUI();
     actualizarWishlistUI();
-    iniciarCarrusel(); 
+    iniciarCarrusel();
 });
 
+// --- Manejadores de Verificación de Edad ---
 document.getElementById('btnYes').onclick = () => {
     sessionStorage.setItem('isAdultVerified', 'true');
     document.getElementById('ageModal').classList.remove('active');
-    document.body.classList.remove('no-scroll'); 
+    document.body.classList.remove('no-scroll');
 };
 
-document.getElementById('btnNo').onclick = () => window.location.href = "https://www.google.com/search?q=imagenes+de+gatitos+tiernos+jugando&tbm=isch";
+document.getElementById('btnNo').onclick = () => {
+    window.location.href = "https://www.google.com/search?q=imagenes+de+gatitos+tiernos+jugando&tbm=isch";
+};
 
+// --- Filtros de búsqueda ---
 document.getElementById('searchInput').addEventListener('input', aplicarFiltros);
 document.getElementById('sortSelect').addEventListener('change', aplicarFiltros);
 
-// ==========================================
-// NUEVO: MODO CENSURA / SFW (BOTÓN DE PÁNICO)
-// ==========================================
+
+// =============================================================================
+// 3. FUNCIONALIDADES DE UI (SFW, TOASTS, ALERTAS)
+// =============================================================================
+
+// --- Modo Censura / SFW ---
 let sfwEnabled = false;
-window.toggleSFW = function() {
+window.toggleSFW = function () {
     sfwEnabled = !sfwEnabled;
     document.body.classList.toggle('sfw-mode', sfwEnabled);
-    
+
     const icon = document.getElementById('sfwIcon');
-    if(sfwEnabled) {
+    if (sfwEnabled) {
         icon.classList.remove('fa-eye');
         icon.classList.add('fa-eye-slash');
         mostrarToast("Modo Discreto Activado 👁️‍🗨️", "normal");
@@ -88,22 +98,59 @@ window.toggleSFW = function() {
     }
 };
 
-// ==========================================
-// CARRUSEL DE OFERTAS
-// ==========================================
+// --- Sistema de Notificaciones (Toasts) ---
+window.mostrarToast = function (mensaje, tipo = 'normal') {
+    const contenedor = document.getElementById('toast-container');
+    const toast = document.createElement('div');
+    toast.classList.add('toast');
+    if (tipo === 'success') toast.classList.add('success');
+
+    let icono = tipo === 'success' 
+        ? '<i class="fa-solid fa-check-circle" style="color:#4cd137"></i>' 
+        : '<i class="fa-solid fa-heart" style="color:var(--neon-pink)"></i>';
+
+    toast.innerHTML = `${icono} <span>${mensaje}</span>`;
+    contenedor.appendChild(toast);
+    setTimeout(() => { toast.remove(); }, 3000);
+};
+
+// --- Alertas Personalizadas ---
+window.mostrarAlertaPersonalizada = function (tipo, titulo, mensaje) {
+    const modal = document.getElementById('customAlertModal');
+    const iconDiv = document.getElementById('alertIcon');
+
+    if (tipo === 'error') iconDiv.innerHTML = '<i class="fa-solid fa-circle-exclamation" style="color: #ff2a75;"></i>';
+    else if (tipo === 'success') iconDiv.innerHTML = '<i class="fa-solid fa-circle-check" style="color: #4cd137;"></i>';
+
+    document.getElementById('alertTitle').innerText = titulo;
+    document.getElementById('alertMessage').innerHTML = mensaje;
+    modal.classList.add('active');
+    document.body.classList.add('no-scroll');
+};
+
+window.cerrarAlertaPersonalizada = () => {
+    document.getElementById('customAlertModal').classList.remove('active');
+    document.body.classList.remove('no-scroll');
+};
+
+
+// =============================================================================
+// 4. CARRUSEL DE OFERTAS
+// =============================================================================
+
 let currentSlide = 0;
 let slideInterval;
 
 function iniciarCarrusel() {
     const track = document.getElementById('sliderTrack');
-    const featuredIds = [15, 22, 7, 11]; 
+    const featuredIds = [15, 22, 7, 11];
     const etiquetas = ["🔥 Oferta Top", "✨ Novedad", "💎 Premium", "🤫 Más Vendido"];
-    
+
     track.innerHTML = '';
-    
+
     featuredIds.forEach((id, index) => {
         let p = products.find(prod => prod.id === id);
-        if(p) {
+        if (p) {
             track.innerHTML += `
                 <div class="slide-card">
                     <div class="slide-img-container">
@@ -114,7 +161,9 @@ function iniciarCarrusel() {
                         <h3 class="slide-title">${p.nombre}</h3>
                         <p class="slide-desc">${p.desc}</p>
                         <p class="slide-price">$${p.precio.toLocaleString('es-CO')}</p>
-                        <button class="btn btn-primary btn-small" style="width: fit-content;" onclick="agregarAlCarrito(${p.id})"><i class="fa-solid fa-cart-plus"></i> Lo Quiero</button>
+                        <button class="btn btn-primary btn-small" style="width: fit-content;" onclick="agregarAlCarrito(${p.id})">
+                            <i class="fa-solid fa-cart-plus"></i> Lo Quiero
+                        </button>
                     </div>
                 </div>
             `;
@@ -126,7 +175,7 @@ function iniciarCarrusel() {
         slideInterval = setInterval(() => {
             currentSlide = (currentSlide + 1) % totalSlides;
             track.style.transform = `translateX(-${currentSlide * 100}%)`;
-        }, 6000); 
+        }, 6000);
     };
 
     arrancarSlider();
@@ -134,9 +183,11 @@ function iniciarCarrusel() {
     document.getElementById('sliderContainer').addEventListener('mouseleave', arrancarSlider);
 }
 
-// ==========================================
-// 3. MODO INVITADO / LOGIN
-// ==========================================
+
+// =============================================================================
+// 5. GESTIÓN DE AUTENTICACIÓN Y ROLES
+// =============================================================================
+
 const authModal = document.getElementById('authModal');
 const userNameDisplay = document.getElementById('userNameDisplay');
 
@@ -144,10 +195,14 @@ document.getElementById('btnLogin').onclick = () => {
     authModal.classList.add('active');
     document.body.classList.add('no-scroll');
 };
-document.getElementById('btnRandomAlias').onclick = () => document.getElementById('alias').value = `Agent_${Math.floor(Math.random() * 9000) + 1000}`;
+
+document.getElementById('btnRandomAlias').onclick = () => {
+    document.getElementById('alias').value = `Agent_${Math.floor(Math.random() * 9000) + 1000}`;
+};
 
 document.getElementById('btnGuest').onclick = () => {
-    currentUserRole = 'guest'; currentAlias = 'Invitado';
+    currentUserRole = 'guest';
+    currentAlias = 'Invitado';
     userNameDisplay.innerText = currentAlias;
     document.getElementById('btnAdminPanel').classList.add('hidden');
     authModal.classList.remove('active');
@@ -158,25 +213,31 @@ document.getElementById('btnGuest').onclick = () => {
 document.getElementById('authForm').onsubmit = (e) => {
     e.preventDefault();
     const aliasInput = document.getElementById('alias').value.trim().toLowerCase();
-    if(aliasInput === 'admin') {
-        currentUserRole = 'admin'; currentAlias = 'Dueño';
+
+    if (aliasInput === 'admin') {
+        currentUserRole = 'admin';
+        currentAlias = 'Dueño';
         document.getElementById('btnAdminPanel').classList.remove('hidden');
     } else {
-        currentUserRole = 'anonymous_user'; currentAlias = document.getElementById('alias').value.trim();
+        currentUserRole = 'anonymous_user';
+        currentAlias = document.getElementById('alias').value.trim();
         document.getElementById('btnAdminPanel').classList.add('hidden');
     }
+
     userNameDisplay.innerText = currentAlias;
     authModal.classList.remove('active');
     document.body.classList.remove('no-scroll');
     renderProducts(products);
 };
 
-// ==========================================
-// 4. WISHLIST Y FAKE TRACKER
-// ==========================================
-window.toggleWishlist = function(id) {
+
+// =============================================================================
+// 6. WISHLIST Y RASTREO (TRACKER)
+// =============================================================================
+
+window.toggleWishlist = function (id) {
     const index = wishlist.indexOf(id);
-    if(index === -1) {
+    if (index === -1) {
         wishlist.push(id);
         mostrarToast("Añadido a tus favoritos 🤍", "normal");
     } else {
@@ -188,19 +249,21 @@ window.toggleWishlist = function(id) {
     renderProducts(products);
 };
 
-function actualizarWishlistUI() { document.getElementById('wishlistCount').innerText = wishlist.length; }
+function actualizarWishlistUI() {
+    document.getElementById('wishlistCount').innerText = wishlist.length;
+}
 
-window.abrirWishlistModal = function() {
+window.abrirWishlistModal = function () {
     document.body.classList.add('no-scroll');
     const cont = document.getElementById('wishlistItemsContainer');
     cont.innerHTML = '';
-    
-    if(wishlist.length === 0) {
+
+    if (wishlist.length === 0) {
         cont.innerHTML = '<p style="color:var(--text-muted); text-align:center;">Aún no tienes secretos guardados.</p>';
     } else {
         wishlist.forEach(id => {
             const prod = products.find(p => p.id === id);
-            if(prod) {
+            if (prod) {
                 cont.innerHTML += `
                     <div style="display: flex; align-items: center; justify-content: space-between; background: #070707; padding: 10px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #222;">
                         <img src="${prod.img}" style="width: 50px; height: 50px; background: white; border-radius: 5px; object-fit: contain;">
@@ -220,37 +283,40 @@ window.abrirWishlistModal = function() {
     document.getElementById('wishlistModal').classList.add('active');
 };
 
-window.abrirTracker = function() {
+// --- Fake Tracker ---
+window.abrirTracker = function () {
     document.body.classList.add('no-scroll');
     document.getElementById('trackerModal').classList.add('active');
     document.getElementById('trackerInput').value = '';
     document.getElementById('trackerSteps').style.display = 'none';
 };
 
-document.getElementById('trackerForm').onsubmit = function(e) {
+document.getElementById('trackerForm').onsubmit = function (e) {
     e.preventDefault();
     let input = document.getElementById('trackerInput').value.trim();
-    if(!input) return;
-    
+    if (!input) return;
+
     let stepsContainer = document.getElementById('trackerSteps');
     stepsContainer.style.display = 'block';
-    
+
     let stepEls = [document.getElementById('step1'), document.getElementById('step2'), document.getElementById('step3')];
     stepEls.forEach(el => el.classList.remove('active'));
-    
+
     setTimeout(() => stepEls[0].classList.add('active'), 500);
     setTimeout(() => stepEls[1].classList.add('active'), 1800);
     setTimeout(() => stepEls[2].classList.add('active'), 3200);
 };
 
-// ==========================================
-// 5. RENDERIZAR PRODUCTOS Y FILTROS
-// ==========================================
+
+// =============================================================================
+// 7. MOTOR DE RENDERIZADO Y FILTRADO DE PRODUCTOS
+// =============================================================================
+
 const productGrid = document.getElementById('productGrid');
 
 function renderProducts(arrayProductos) {
     productGrid.innerHTML = '';
-    if(arrayProductos.length === 0) {
+    if (arrayProductos.length === 0) {
         productGrid.innerHTML = `<h3 style="color:var(--text-muted); grid-column: 1/-1; text-align:center;">No hay productos que coincidan.</h3>`;
         return;
     }
@@ -258,7 +324,7 @@ function renderProducts(arrayProductos) {
     arrayProductos.forEach(prod => {
         const div = document.createElement('div');
         div.classList.add('product-card', 'fade-in');
-        
+
         let adminHtml = currentUserRole === 'admin' ? `
             <div class="admin-controls">
                 <button class="btn-icon" onclick="editarProducto(${prod.id}); event.stopPropagation();"><i class="fa-solid fa-pen"></i></button>
@@ -270,9 +336,10 @@ function renderProducts(arrayProductos) {
         let heartClass = isWished ? 'fa-solid fa-heart' : 'fa-regular fa-heart';
         let btnClass = isWished ? 'btn-wishlist active' : 'btn-wishlist';
 
-        let isLowStock = (prod.id % 3 === 0); 
+        // Lógica de Stock / FOMO
+        let isLowStock = (prod.id % 3 === 0);
         let fomoOptions = [1, 2, 5, 10];
-        let unitsLeft = fomoOptions[prod.id % fomoOptions.length]; 
+        let unitsLeft = fomoOptions[prod.id % fomoOptions.length];
         let fomoHtml = isLowStock ? `<p class="fomo-text"><i class="fa-solid fa-fire"></i> ¡Últimas ${unitsLeft} unidades!</p>` : '';
 
         div.innerHTML = `
@@ -293,7 +360,7 @@ function renderProducts(arrayProductos) {
     });
 }
 
-window.filtrar = function(categoria) {
+window.filtrar = function (categoria) {
     document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
     event.target.classList.add('active');
     categoriaActual = categoria;
@@ -316,62 +383,30 @@ function aplicarFiltros() {
     renderProducts(filtrados);
 }
 
-// ==========================================
-// 6. TOASTS Y ALERTAS
-// ==========================================
-window.mostrarToast = function(mensaje, tipo = 'normal') {
-    const contenedor = document.getElementById('toast-container');
-    const toast = document.createElement('div');
-    toast.classList.add('toast');
-    if(tipo === 'success') toast.classList.add('success');
-    
-    let icono = tipo === 'success' ? '<i class="fa-solid fa-check-circle" style="color:#4cd137"></i>' : '<i class="fa-solid fa-heart" style="color:var(--neon-pink)"></i>';
-    toast.innerHTML = `${icono} <span>${mensaje}</span>`;
-    contenedor.appendChild(toast);
-    setTimeout(() => { toast.remove(); }, 3000);
-}
 
-window.mostrarAlertaPersonalizada = function(tipo, titulo, mensaje) {
-    const modal = document.getElementById('customAlertModal');
-    const iconDiv = document.getElementById('alertIcon');
-    if(tipo === 'error') iconDiv.innerHTML = '<i class="fa-solid fa-circle-exclamation" style="color: #ff2a75;"></i>';
-    else if (tipo === 'success') iconDiv.innerHTML = '<i class="fa-solid fa-circle-check" style="color: #4cd137;"></i>';
-    
-    document.getElementById('alertTitle').innerText = titulo;
-    document.getElementById('alertMessage').innerHTML = mensaje;
-    modal.classList.add('active');
-    document.body.classList.add('no-scroll');
-};
+// =============================================================================
+// 8. CARRITO Y DETALLES DEL PRODUCTO
+// =============================================================================
 
-window.cerrarAlertaPersonalizada = () => {
-    document.getElementById('customAlertModal').classList.remove('active');
-    document.body.classList.remove('no-scroll');
-};
-
-// ==========================================
-// 7. CARRITO Y DETALLES DE PRODUCTO
-// ==========================================
 const cartSidebar = document.getElementById('cartSidebar');
 
-// EL CARRITO YA NO BLOQUEA EL SCROLL
-document.getElementById('btnCartToggle').onclick = () => { 
-    cartSidebar.classList.add('open'); 
+document.getElementById('btnCartToggle').onclick = () => {
+    cartSidebar.classList.add('open');
 };
-document.getElementById('closeCart').onclick = () => { 
-    cartSidebar.classList.remove('open'); 
+document.getElementById('closeCart').onclick = () => {
+    cartSidebar.classList.remove('open');
 };
 
-window.abrirDetalles = function(id) {
+window.abrirDetalles = function (id) {
     const prod = products.find(p => p.id === id);
-    if(!prod) return;
-    
+    if (!prod) return;
+
     document.body.classList.add('no-scroll');
-    
     document.getElementById('detailImg').src = prod.img;
     document.getElementById('detailName').innerText = prod.nombre;
     document.getElementById('detailDesc').innerText = prod.desc;
     document.getElementById('detailPrice').innerText = `$${prod.precio.toLocaleString('es-CO')}`;
-    
+
     const bancoOpiniones = [
         "Excelente calidad, la entrega fue súper discreta.",
         "Me encantó, el material es muy premium. 10/10.",
@@ -395,8 +430,8 @@ window.abrirDetalles = function(id) {
             <strong>${agent2}:</strong> "${rev2}"
         </div>
     `;
-    
-    document.getElementById('detailBtnAdd').onclick = function() {
+
+    document.getElementById('detailBtnAdd').onclick = function () {
         agregarAlCarrito(prod.id);
         document.getElementById('productModal').classList.remove('active');
         document.body.classList.remove('no-scroll');
@@ -404,22 +439,27 @@ window.abrirDetalles = function(id) {
     document.getElementById('productModal').classList.add('active');
 };
 
-window.agregarAlCarrito = function(id) {
+// --- Lógica de Carrito ---
+window.agregarAlCarrito = function (id) {
     const producto = products.find(p => p.id === id);
     const itemEnCarrito = cart.find(item => item.id === id);
     if (itemEnCarrito) itemEnCarrito.cantidad++;
     else cart.push({ ...producto, cantidad: 1 });
-    
+
     guardarYActualizarCarrito();
     mostrarToast(`${producto.nombre} añadido.`, 'normal');
 };
 
-window.cambiarCantidad = function(id, delta) {
+window.cambiarCantidad = function (id, delta) {
     const item = cart.find(i => i.id === id);
-    if(item) { item.cantidad += delta; if(item.cantidad <= 0) cart = cart.filter(i => i.id !== id); guardarYActualizarCarrito(); }
+    if (item) {
+        item.cantidad += delta;
+        if (item.cantidad <= 0) cart = cart.filter(i => i.id !== id);
+        guardarYActualizarCarrito();
+    }
 };
 
-window.eliminarDelCarrito = function(id) {
+window.eliminarDelCarrito = function (id) {
     cart = cart.filter(i => i.id !== id);
     guardarYActualizarCarrito();
 };
@@ -432,7 +472,8 @@ function guardarYActualizarCarrito() {
 function actualizarCarritoUI() {
     const cartItemsCont = document.getElementById('cartItems');
     cartItemsCont.innerHTML = '';
-    let subtotal = 0; let cantidadTotal = 0;
+    let subtotal = 0;
+    let cantidadTotal = 0;
 
     cart.forEach(item => {
         subtotal += item.precio * item.cantidad;
@@ -455,7 +496,8 @@ function actualizarCarritoUI() {
     });
 
     document.getElementById('cartCount').innerText = cantidadTotal;
-    
+
+    // Cálculo de Envío y Barra de Progreso
     const metaEnvio = 150000;
     let shipping = 0;
     const txtEnvio = document.getElementById('shippingText');
@@ -479,77 +521,116 @@ function actualizarCarritoUI() {
         fillEnvio.style.background = 'linear-gradient(90deg, var(--neon-purple), var(--neon-pink))';
         shipping = 15000;
     }
-    
+
     let taxes = subtotal > 0 ? (subtotal * 0.10) : 0;
-    
+
     document.getElementById('cartSubtotal').innerText = subtotal.toLocaleString('es-CO');
     document.getElementById('cartTax').innerText = taxes.toLocaleString('es-CO');
     document.getElementById('cartShipping').innerText = shipping.toLocaleString('es-CO');
     document.getElementById('cartTotal').innerText = (subtotal + taxes + shipping).toLocaleString('es-CO');
 }
 
-window.abrirCheckout = function() {
-    if(cart.length === 0) { mostrarAlertaPersonalizada('error', 'Carrito Vacío', 'Por favor, añade productos al carrito antes de proceder al pago.'); return; }
+
+// =============================================================================
+// 9. PROCESO DE PAGO (CHECKOUT)
+// =============================================================================
+
+window.abrirCheckout = function () {
+    if (cart.length === 0) {
+        mostrarAlertaPersonalizada('error', 'Carrito Vacío', 'Por favor, añade productos al carrito antes de proceder al pago.');
+        return;
+    }
     document.getElementById('checkoutTotal').innerText = document.getElementById('cartTotal').innerText;
     cartSidebar.classList.remove('open');
     document.getElementById('checkoutModal').classList.add('active');
-    document.body.classList.add('no-scroll'); 
-};
-
-window.selectPayment = function(element) { document.querySelectorAll('.payment-card').forEach(el => el.classList.remove('active')); element.classList.add('active'); };
-
-document.getElementById('paymentForm').onsubmit = function(e) {
-    e.preventDefault(); 
-    let direccionInput = document.getElementById('checkoutAddress').value;
-    let emailInput = document.getElementById('checkoutEmail').value;
-    
-    let codigoRastreo = "PD-" + (Math.floor(Math.random() * 90000000) + 10000000);
-    
-    document.getElementById('checkoutModal').classList.remove('active');
-    
-    mostrarAlertaPersonalizada('success', '¡Pago Exitoso!', `Se ha procesado tu pago de <strong>$${document.getElementById('checkoutTotal').innerText} COP</strong> de forma segura.<br><br>📦 El paquete ciego será enviado a:<br><strong>${direccionInput}</strong><br><br>🔍 Tu código de rastreo es:<br><strong style="color:var(--neon-pink); font-size:1.15rem;">${codigoRastreo}</strong><br><br>📧 Recibo anónimo enviado a:<br><strong>${emailInput}</strong>`);
-    
-    cart = []; guardarYActualizarCarrito();
-    document.getElementById('paymentForm').reset();
-};
-
-// ==========================================
-// 8. ADMIN
-// ==========================================
-const adminModal = document.getElementById('adminModal');
-window.abrirAdminModal = function() { 
-    document.getElementById('adminModalTitle').innerText = "Nuevo Producto"; 
-    document.getElementById('adminForm').reset(); 
-    document.getElementById('prodId').value = ''; 
-    adminModal.classList.add('active'); 
     document.body.classList.add('no-scroll');
 };
 
-document.getElementById('adminForm').onsubmit = function(e) {
-    e.preventDefault();
-    const idProd = document.getElementById('prodId').value;
-    const nuevoProducto = { id: idProd ? parseInt(idProd) : Date.now(), nombre: document.getElementById('prodName').value, desc: document.getElementById('prodDesc').value, precio: parseFloat(document.getElementById('prodPrice').value), categoria: document.getElementById('prodCategory').value, img: document.getElementById('prodImg').value };
-    if (idProd) products[products.findIndex(p => p.id == idProd)] = nuevoProducto; else products.push(nuevoProducto);
-    localStorage.setItem('pd_products_cop', JSON.stringify(products));
-    renderProducts(products); 
-    adminModal.classList.remove('active'); 
-    document.body.classList.remove('no-scroll');
-    mostrarToast("Producto guardado", "success"); iniciarCarrusel();
+window.selectPayment = function (element) {
+    document.querySelectorAll('.payment-card').forEach(el => el.classList.remove('active'));
+    element.classList.add('active');
 };
 
-window.editarProducto = function(id) {
-    const prod = products.find(p => p.id === id); if(!prod) return;
-    document.getElementById('adminModalTitle').innerText = "Editar Producto"; 
-    document.getElementById('prodId').value = prod.id; 
-    document.getElementById('prodName').value = prod.nombre; 
-    document.getElementById('prodDesc').value = prod.desc || ''; 
-    document.getElementById('prodPrice').value = prod.precio; 
-    document.getElementById('prodCategory').value = prod.categoria; 
-    document.getElementById('prodImg').value = prod.img; 
+document.getElementById('paymentForm').onsubmit = function (e) {
+    e.preventDefault();
+    let direccionInput = document.getElementById('checkoutAddress').value;
+    let emailInput = document.getElementById('checkoutEmail').value;
+
+    let codigoRastreo = "PD-" + (Math.floor(Math.random() * 90000000) + 10000000);
+
+    document.getElementById('checkoutModal').classList.remove('active');
+
+    mostrarAlertaPersonalizada('success', '¡Pago Exitoso!',
+        `Se ha procesado tu pago de <strong>$${document.getElementById('checkoutTotal').innerText} COP</strong> de forma segura.<br><br>📦 El paquete ciego será enviado a:<br><strong>${direccionInput}</strong><br><br>🔍 Tu código de rastreo es:<br><strong style="color:var(--neon-pink); font-size:1.15rem;">${codigoRastreo}</strong><br><br>📧 Recibo anónimo enviado a:<br><strong>${emailInput}</strong>`
+    );
+
+    cart = [];
+    guardarYActualizarCarrito();
+    document.getElementById('paymentForm').reset();
+};
+
+
+// =============================================================================
+// 10. PANEL DE ADMINISTRACIÓN (CRUD PRODUCTOS)
+// =============================================================================
+
+const adminModal = document.getElementById('adminModal');
+
+window.abrirAdminModal = function () {
+    document.getElementById('adminModalTitle').innerText = "Nuevo Producto";
+    document.getElementById('adminForm').reset();
+    document.getElementById('prodId').value = '';
     adminModal.classList.add('active');
     document.body.classList.add('no-scroll');
 };
 
-window.eliminarProducto = function(id) {
-    if(confirm("¿Seguro que deseas eliminar este producto?")) { products = products.filter(p => p.id !== id); localStorage.setItem('pd_products_cop', JSON.stringify(products)); renderProducts(products); mostrarToast("Producto eliminado", "success"); iniciarCarrusel(); }
+document.getElementById('adminForm').onsubmit = function (e) {
+    e.preventDefault();
+    const idProd = document.getElementById('prodId').value;
+    const nuevoProducto = {
+        id: idProd ? parseInt(idProd) : Date.now(),
+        nombre: document.getElementById('prodName').value,
+        desc: document.getElementById('prodDesc').value,
+        precio: parseFloat(document.getElementById('prodPrice').value),
+        categoria: document.getElementById('prodCategory').value,
+        img: document.getElementById('prodImg').value
+    };
+
+    if (idProd) {
+        products[products.findIndex(p => p.id == idProd)] = nuevoProducto;
+    } else {
+        products.push(nuevoProducto);
+    }
+
+    localStorage.setItem('pd_products_cop', JSON.stringify(products));
+    renderProducts(products);
+    adminModal.classList.remove('active');
+    document.body.classList.remove('no-scroll');
+    mostrarToast("Producto guardado", "success");
+    iniciarCarrusel();
+};
+
+window.editarProducto = function (id) {
+    const prod = products.find(p => p.id === id);
+    if (!prod) return;
+
+    document.getElementById('adminModalTitle').innerText = "Editar Producto";
+    document.getElementById('prodId').value = prod.id;
+    document.getElementById('prodName').value = prod.nombre;
+    document.getElementById('prodDesc').value = prod.desc || '';
+    document.getElementById('prodPrice').value = prod.precio;
+    document.getElementById('prodCategory').value = prod.categoria;
+    document.getElementById('prodImg').value = prod.img;
+    adminModal.classList.add('active');
+    document.body.classList.add('no-scroll');
+};
+
+window.eliminarProducto = function (id) {
+    if (confirm("¿Seguro que deseas eliminar este producto?")) {
+        products = products.filter(p => p.id !== id);
+        localStorage.setItem('pd_products_cop', JSON.stringify(products));
+        renderProducts(products);
+        mostrarToast("Producto eliminado", "success");
+        iniciarCarrusel();
+    }
 };
