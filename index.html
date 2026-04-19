@@ -147,11 +147,11 @@
 
                 <h4 style="margin-top: 12px; margin-bottom: 5px; font-size: 0.9rem; border-bottom: 1px solid #333; padding-bottom: 3px;">2. Método de Pago</h4>
                 <div class="payment-methods">
-                    <div class="payment-card active" onclick="selectPayment(this)"><img src="payment/visa.png" alt="Visa" onerror="this.src='https://via.placeholder.com/40x20?text=V'"></div>
-                    <div class="payment-card" onclick="selectPayment(this)"><img src="payment/mastercard.png" alt="Mastercard" onerror="this.src='https://via.placeholder.com/40x20?text=MC'"></div>
-                    <div class="payment-card" onclick="selectPayment(this)"><img src="payment/amex.png" alt="Amex" onerror="this.src='https://via.placeholder.com/40x20?text=Amex'"></div>
-                    <div class="payment-card" onclick="selectPayment(this)"><img src="payment/paypal.png" alt="PayPal" onerror="this.src='https://via.placeholder.com/40x20?text=PayP'"></div>
-                    <div class="payment-card" onclick="selectPayment(this)"><img src="payment/pse.png" alt="PSE" onerror="this.src='https://via.placeholder.com/40x20?text=PSE'"></div>
+                    <div class="payment-card active"><img src="payment/visa.png" alt="Visa" onerror="this.src='https://via.placeholder.com/40x20?text=V'"></div>
+                    <div class="payment-card"><img src="payment/mastercard.png" alt="Mastercard" onerror="this.src='https://via.placeholder.com/40x20?text=MC'"></div>
+                    <div class="payment-card"><img src="payment/amex.png" alt="Amex" onerror="this.src='https://via.placeholder.com/40x20?text=Amex'"></div>
+                    <div class="payment-card"><img src="payment/paypal.png" alt="PayPal" onerror="this.src='https://via.placeholder.com/40x20?text=PayP'"></div>
+                    <div class="payment-card"><img src="payment/pse.png" alt="PSE" onerror="this.src='https://via.placeholder.com/40x20?text=PSE'"></div>
                 </div>
 
                 <h4 style="margin-top: 12px; margin-bottom: 5px; font-size: 0.9rem; border-bottom: 1px solid #333; padding-bottom: 3px;">3. Tarjeta</h4>
@@ -174,17 +174,17 @@
         </div>
         <nav>
             <button id="btnAdminPanel" class="nav-btn hidden" onclick="abrirAdminModal()"><i class="fa-solid fa-plus"></i> Añadir Prod.</button>
-            <button id="btnLogin" class="nav-btn"><i class="fa-solid fa-user-secret"></i> <span id="userNameDisplay">Invitado</span></button>
+            <button id="btnLogin" class="nav-btn" onclick="document.getElementById('authModal').classList.add('active'); document.body.classList.add('no-scroll');"><i class="fa-solid fa-user-secret"></i> <span id="userNameDisplay">Invitado</span></button>
 
             <button class="nav-btn" onclick="toggleSFW()" title="Modo Discreto (Censurar Imágenes)">
                 <i id="sfwIcon" class="fa-solid fa-eye"></i>
             </button>
 
-            <button class="nav-btn" onclick="abrirTracker()" title="Rastrear Paquete Anónimo">
+            <button class="nav-btn" onclick="document.getElementById('trackerModal').classList.add('active'); document.body.classList.add('no-scroll');" title="Rastrear Paquete Anónimo">
                 <i class="fa-solid fa-box-open"></i>
             </button>
 
-            <button id="btnWishlistToggle" class="nav-btn" onclick="abrirWishlistModal()">
+            <button id="btnWishlistToggle" class="nav-btn" onclick="document.getElementById('wishlistModal').classList.add('active'); document.body.classList.add('no-scroll');">
                 <i class="fa-solid fa-heart"></i>
                 <span id="wishlistCount" class="badge" style="background:var(--neon-purple);">0</span>
             </button>
@@ -279,18 +279,22 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2024 Purple Desire. Todos los derechos reservados.</p>
+            <p>&copy; 2026 Purple Desire. Todos los derechos reservados.</p>
         </div>
     </footer>
 
     <div id="toast-container"></div>
 
-    <a href="https://wa.me/573000000000?text=Hola,%20tengo%20una%20duda%20sobre%20un%20producto%20en%20Purple%20Desire.%20%C2%BFMe%20pueden%20ayudar%20de%20forma%20discreta?" class="whatsapp-float" target="_blank" title="Chat Anónimo">
+    <a href="https://wa.me/573000000000?text=Hola,%20tengo%20una%20duda%20sobre%20un%20producto%20en%20Purple%20Desire." class="whatsapp-float" target="_blank" title="Chat Anónimo">
         <i class="fa-brands fa-whatsapp" style="font-size: 1.6rem;"></i>
         <span class="wa-text">¿Dudas? Chat Anónimo</span>
     </a>
 
+    <script src="js/config.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/productos.js"></script>
+    <script src="js/carrito.js"></script>
     <script src="app.js"></script>
-</body>
 
+</body>
 </html>
