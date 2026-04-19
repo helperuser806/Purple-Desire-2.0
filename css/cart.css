@@ -1,34 +1,377 @@
-.cart-sidebar { position: fixed; top: 0; right: -400px; width: 100%; max-width: 400px; height: 100vh; background-color: var(--bg-card); border-left: 1px solid var(--neon-purple); z-index: 2000; transition: right 0.4s cubic-bezier(0.8, 0, 0.2, 1); display: flex; flex-direction: column; }
-.cart-sidebar.open { right: 0; box-shadow: -5px 0 30px rgba(138, 43, 226, 0.2); }
-.cart-header { padding: 20px; border-bottom: 1px solid #222; display: flex; justify-content: space-between; align-items: center; }
-.close-btn-cart { background: none; border: none; color: var(--text-light); font-size: 2rem; cursor: pointer; transition: 0.3s; }
-.cart-items { flex-grow: 1; overflow-y: auto; padding: 20px; }
-.cart-item { display: flex; justify-content: space-between; align-items: center; background: #070707; padding: 10px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #222; }
-.cart-item img { width: 60px; height: 60px; object-fit: contain; border-radius: 5px; background: #fff; }
-.cart-item-info { flex-grow: 1; margin: 0 15px; }
-.cart-item-info h4 { font-size: 0.95rem; margin-bottom: 5px; }
-.cart-item-actions button { background: none; border: none; color: var(--text-muted); cursor: pointer; padding: 5px; font-size: 1.2rem; }
-.cart-footer { padding: 20px; border-top: 1px solid #222; background: #070707; }
+/* =========================================================
+   SIDEBAR DEL CARRITO
+   ---------------------------------------------------------
+   Panel lateral que aparece desde la derecha.
+   ========================================================= */
 
-/* Envíos */
-.shipping-progress-container { margin-bottom: 15px; padding: 10px; background: rgba(15, 15, 15, 0.8); border-radius: 8px; border: 1px dashed var(--neon-purple); text-align: center; }
-.shipping-progress-bar { width: 100%; height: 8px; background: #222; border-radius: 4px; overflow: hidden; margin: 8px 0; }
-.shipping-progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--neon-purple), var(--neon-pink)); transition: width 0.5s ease-in-out, background 0.3s; }
-.shipping-text { font-size: 0.8rem; color: var(--text-muted); }
-.shipping-text strong { color: var(--neon-pink); font-size: 0.9rem; }
+.cart-sidebar {
 
-/* Totales */
-.cart-summary { margin-bottom: 15px; font-size: 0.9rem; border-bottom: 1px dashed #333; padding-bottom: 10px; }
-.summary-row { display: flex; justify-content: space-between; margin-bottom: 8px; color: var(--text-muted); }
-.cart-total { font-size: 1.4rem; font-weight: bold; color: var(--neon-pink); display: flex; justify-content: space-between; }
+    /* Posición fija en pantalla */
+    position: fixed;
+    top: 0;
 
-/* Pagos y Blind Packaging */
-.payment-methods { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; justify-content: center; }
-.payment-card { background: #fff; padding: 5px; border-radius: 6px; cursor: pointer; border: 2px solid transparent; transition: 0.3s; display: flex; align-items: center; justify-content: center; width: 55px; height: 35px; }
-.payment-card img { width: 100%; height: 100%; object-fit: contain; }
-.payment-card.active { border-color: var(--neon-pink); box-shadow: 0 0 10px rgba(255, 42, 117, 0.5); transform: scale(1.05); }
+    /* Inicialmente oculto fuera de la pantalla */
+    right: -400px;
 
-.blind-packaging-banner { display: flex; align-items: center; background: rgba(138, 43, 226, 0.1); border: 1px dashed var(--neon-purple); border-radius: 8px; padding: 10px; margin-bottom: 15px; gap: 10px; }
-.box-icon-container i { font-size: 1.5rem; color: #d2b48c; animation: floatBox 3s ease-in-out infinite; text-shadow: 0 4px 8px rgba(0,0,0,0.5); }
-.blind-packaging-text { font-size: 0.75rem; color: var(--text-light); line-height: 1.3; }
-.blind-packaging-text strong { color: var(--neon-pink); font-size: 0.85rem; }
+    /* Tamaño */
+    width: 100%;
+    max-width: 400px;
+    height: 100vh;
+
+    /* Estilo visual */
+    background-color: var(--bg-card);
+    border-left: 1px solid var(--neon-purple);
+
+    /* Prioridad sobre otros elementos */
+    z-index: 2000;
+
+    /* Animación de entrada/salida */
+    transition: right 0.4s cubic-bezier(0.8, 0, 0.2, 1);
+
+    /* Layout interno */
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* 
+   Estado activo (visible)
+*/
+.cart-sidebar.open {
+    right: 0;
+    box-shadow: -5px 0 30px rgba(138, 43, 226, 0.2);
+}
+
+
+
+/* =========================================================
+   HEADER DEL CARRITO
+   ========================================================= */
+
+.cart-header {
+
+    padding: 20px;
+
+    /* Línea inferior */
+    border-bottom: 1px solid #222;
+
+    /* Layout */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+
+/* 
+   Botón de cerrar carrito
+*/
+.close-btn-cart {
+    background: none;
+    border: none;
+    color: var(--text-light);
+    font-size: 2rem;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+
+
+/* =========================================================
+   LISTA DE PRODUCTOS
+   ========================================================= */
+
+.cart-items {
+
+    /* Ocupa todo el espacio disponible */
+    flex-grow: 1;
+
+    /* Scroll vertical */
+    overflow-y: auto;
+
+    padding: 20px;
+}
+
+
+
+/* =========================================================
+   ITEM INDIVIDUAL DEL CARRITO
+   ========================================================= */
+
+.cart-item {
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    background: #070707;
+
+    padding: 10px;
+    margin-bottom: 10px;
+
+    border-radius: 8px;
+    border: 1px solid #222;
+}
+
+
+/* Imagen del producto */
+.cart-item img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    border-radius: 5px;
+    background: #fff;
+}
+
+
+/* Contenedor de información */
+.cart-item-info {
+    flex-grow: 1;
+    margin: 0 15px;
+}
+
+
+/* Título del producto */
+.cart-item-info h4 {
+    font-size: 0.95rem;
+    margin-bottom: 5px;
+}
+
+
+/* Acciones (botones) */
+.cart-item-actions button {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 5px;
+    font-size: 1.2rem;
+}
+
+
+
+/* =========================================================
+   FOOTER DEL CARRITO
+   ========================================================= */
+
+.cart-footer {
+
+    padding: 20px;
+
+    /* Línea superior */
+    border-top: 1px solid #222;
+
+    background: #070707;
+}
+
+
+
+/* =========================================================
+   SECCIÓN: ENVÍOS
+   ---------------------------------------------------------
+   Muestra progreso para envío gratis o estado de envío
+   ========================================================= */
+
+.shipping-progress-container {
+
+    margin-bottom: 15px;
+    padding: 10px;
+
+    background: rgba(15, 15, 15, 0.8);
+
+    border-radius: 8px;
+    border: 1px dashed var(--neon-purple);
+
+    text-align: center;
+}
+
+
+/* Barra de progreso (fondo) */
+.shipping-progress-bar {
+
+    width: 100%;
+    height: 8px;
+
+    background: #222;
+
+    border-radius: 4px;
+
+    overflow: hidden;
+    margin: 8px 0;
+}
+
+
+/* Barra de progreso (relleno dinámico) */
+.shipping-progress-fill {
+
+    height: 100%;
+
+    /* Valor dinámico controlado por JS */
+    width: 0%;
+
+    background: linear-gradient(90deg, var(--neon-purple), var(--neon-pink));
+
+    transition: width 0.5s ease-in-out, background 0.3s;
+}
+
+
+/* Texto de envío */
+.shipping-text {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+
+/* Parte destacada del texto */
+.shipping-text strong {
+    color: var(--neon-pink);
+    font-size: 0.9rem;
+}
+
+
+
+/* =========================================================
+   SECCIÓN: TOTALES
+   ========================================================= */
+
+.cart-summary {
+
+    margin-bottom: 15px;
+    font-size: 0.9rem;
+
+    border-bottom: 1px dashed #333;
+    padding-bottom: 10px;
+}
+
+
+/* Fila individual de resumen */
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    color: var(--text-muted);
+}
+
+
+/* Total final */
+.cart-total {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: var(--neon-pink);
+
+    display: flex;
+    justify-content: space-between;
+}
+
+
+
+/* =========================================================
+   MÉTODOS DE PAGO
+   ========================================================= */
+
+.payment-methods {
+
+    display: flex;
+    gap: 8px;
+
+    margin-bottom: 12px;
+
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+
+/* Tarjeta individual de pago */
+.payment-card {
+
+    background: #fff;
+
+    padding: 5px;
+
+    border-radius: 6px;
+
+    cursor: pointer;
+
+    border: 2px solid transparent;
+
+    transition: 0.3s;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 55px;
+    height: 35px;
+}
+
+
+/* Imagen dentro de la tarjeta */
+.payment-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+
+/* Estado activo */
+.payment-card.active {
+    border-color: var(--neon-pink);
+    box-shadow: 0 0 10px rgba(255, 42, 117, 0.5);
+    transform: scale(1.05);
+}
+
+
+
+/* =========================================================
+   BLIND PACKAGING (EMPAQUE DISCRETO)
+   ========================================================= */
+
+.blind-packaging-banner {
+
+    display: flex;
+    align-items: center;
+
+    background: rgba(138, 43, 226, 0.1);
+
+    border: 1px dashed var(--neon-purple);
+
+    border-radius: 8px;
+
+    padding: 10px;
+    margin-bottom: 15px;
+
+    gap: 10px;
+}
+
+
+/* Ícono de caja */
+.box-icon-container i {
+
+    font-size: 1.5rem;
+
+    color: #d2b48c;
+
+    /* Animación flotante definida en components.css */
+    animation: floatBox 3s ease-in-out infinite;
+
+    text-shadow: 0 4px 8px rgba(0,0,0,0.5);
+}
+
+
+/* Texto descriptivo */
+.blind-packaging-text {
+
+    font-size: 0.75rem;
+
+    color: var(--text-light);
+
+    line-height: 1.3;
+}
+
+
+/* Texto destacado */
+.blind-packaging-text strong {
+
+    color: var(--neon-pink);
+    font-size: 0.85rem;
+}

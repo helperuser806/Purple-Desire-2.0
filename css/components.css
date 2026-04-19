@@ -1,29 +1,257 @@
-/* Animaciones */
-@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes floatBox { 0% { transform: translateY(0); } 50% { transform: translateY(-5px); } 100% { transform: translateY(0); } }
-@keyframes pulseFOMO { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
-@keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-@keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+/* =========================================================
+   ANIMACIONES (@keyframes)
+   ---------------------------------------------------------
+   Definen comportamientos reutilizables para animaciones.
+   No hacen nada por sí solas, se aplican con "animation".
+   ========================================================= */
 
-/* Utilidades */
-.neon-text { color: var(--neon-pink); text-shadow: 0 0 10px rgba(255, 42, 117, 0.6); }
-.hidden { display: none !important; }
-.glass-effect { background: rgba(15, 15, 15, 0.85); backdrop-filter: blur(12px); border: 1px solid rgba(255, 42, 117, 0.2); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6); }
-.fade-in { animation: fadeIn 0.8s ease-in-out; }
 
-/* Botones */
-.btn { padding: 10px 18px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px; }
-.btn-primary { background: linear-gradient(45deg, var(--neon-purple), var(--neon-pink)); color: white; }
-.btn-primary:hover { box-shadow: 0 0 20px rgba(255, 42, 117, 0.5); transform: scale(1.03); }
-.btn-secondary { background-color: #222; color: white; border: 1px solid #444; }
-.btn-secondary:hover { background-color: #333; color: var(--neon-pink); border-color: var(--neon-pink); }
-.btn-outline { background: transparent; border: 1px solid var(--text-light); color: var(--text-light); }
-.btn-icon { background: none; border: none; color: white; cursor: pointer; font-size: 1rem; transition: 0.2s; margin: 0 3px; }
-.btn-icon:hover { color: var(--neon-pink); transform: scale(1.1); }
-.w-100 { width: 100%; }
-
-/* Modo SFW */
-body.sfw-mode .product-img, body.sfw-mode .slide-img, body.sfw-mode .cart-item img, body.sfw-mode #detailImg {
-    filter: blur(15px) grayscale(30%); transition: filter 0.4s ease;
+/* 
+   fadeIn
+   - Aparece suavemente desde abajo
+   - Se usa para entradas de elementos
+*/
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
-body.sfw-mode .product-img:hover, body.sfw-mode .slide-img:hover { filter: blur(0); }
+
+
+/* 
+   floatBox
+   - Movimiento flotante vertical (sube y baja)
+   - Da sensación de "levitación"
+*/
+@keyframes floatBox {
+    0%   { transform: translateY(0); }
+    50%  { transform: translateY(-5px); }
+    100% { transform: translateY(0); }
+}
+
+
+/* 
+   pulseFOMO
+   - Efecto de parpadeo de opacidad
+   - Útil para llamar la atención (FOMO)
+*/
+@keyframes pulseFOMO {
+    0%   { opacity: 1; }
+    50%  { opacity: 0.3; }
+    100% { opacity: 1; }
+}
+
+
+/* 
+   slideInRight
+   - Entra desde la derecha hacia su posición
+*/
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+
+/* 
+   fadeOut
+   - Desaparece progresivamente
+*/
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+}
+
+
+
+/* =========================================================
+   UTILIDADES (CLASES REUTILIZABLES)
+   ---------------------------------------------------------
+   Clases pequeñas que se pueden aplicar en cualquier lugar.
+   No dependen de estructura específica.
+   ========================================================= */
+
+
+/* 
+   Texto con efecto neón
+*/
+.neon-text {
+    color: var(--neon-pink);
+    text-shadow: 0 0 10px rgba(255, 42, 117, 0.6);
+}
+
+
+/* 
+   Oculta completamente un elemento
+   - !important evita que otros estilos lo sobrescriban
+*/
+.hidden {
+    display: none !important;
+}
+
+
+/* 
+   Efecto tipo "glassmorphism"
+   - Fondo semitransparente
+   - Blur detrás del elemento
+   - Borde y sombra sutil
+*/
+.glass-effect {
+    background: rgba(15, 15, 15, 0.85);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 42, 117, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+}
+
+
+/* 
+   Aplica la animación fadeIn
+*/
+.fade-in {
+    animation: fadeIn 0.8s ease-in-out;
+}
+
+
+
+/* =========================================================
+   BOTONES (COMPONENTES)
+   ---------------------------------------------------------
+   Sistema de botones reutilizable.
+   Se basa en la clase base .btn
+   ========================================================= */
+
+
+/* 
+   Clase base de todos los botones
+   - Define estructura general
+*/
+.btn {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+
+/* 
+   Botón principal (llamativo)
+*/
+.btn-primary {
+    background: linear-gradient(45deg, var(--neon-purple), var(--neon-pink));
+    color: white;
+}
+
+
+/* 
+   Hover del botón principal
+   - Brillo y pequeño zoom
+*/
+.btn-primary:hover {
+    box-shadow: 0 0 20px rgba(255, 42, 117, 0.5);
+    transform: scale(1.03);
+}
+
+
+/* 
+   Botón secundario (menos llamativo)
+*/
+.btn-secondary {
+    background-color: #222;
+    color: white;
+    border: 1px solid #444;
+}
+
+
+/* 
+   Hover del botón secundario
+*/
+.btn-secondary:hover {
+    background-color: #333;
+    color: var(--neon-pink);
+    border-color: var(--neon-pink);
+}
+
+
+/* 
+   Botón con borde (outline)
+*/
+.btn-outline {
+    background: transparent;
+    border: 1px solid var(--text-light);
+    color: var(--text-light);
+}
+
+
+/* 
+   Botón solo ícono
+*/
+.btn-icon {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: 0.2s;
+    margin: 0 3px;
+}
+
+
+/* 
+   Hover botón ícono
+*/
+.btn-icon:hover {
+    color: var(--neon-pink);
+    transform: scale(1.1);
+}
+
+
+/* 
+   Utilidad: ancho completo
+*/
+.w-100 {
+    width: 100%;
+}
+
+
+
+/* =========================================================
+   MODO SFW (SAFE FOR WORK)
+   ---------------------------------------------------------
+   Aplica censura visual a imágenes sensibles.
+   Se activa agregando la clase "sfw-mode" al <body>
+   ========================================================= */
+
+
+/* 
+   Aplica blur + escala de grises a imágenes
+*/
+body.sfw-mode .product-img,
+body.sfw-mode .slide-img,
+body.sfw-mode .cart-item img,
+body.sfw-mode #detailImg {
+    filter: blur(15px) grayscale(30%);
+    transition: filter 0.4s ease;
+}
+
+
+/* 
+   Permite ver la imagen al pasar el mouse
+*/
+body.sfw-mode .product-img:hover,
+body.sfw-mode .slide-img:hover {
+    filter: blur(0);
+}

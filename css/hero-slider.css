@@ -1,21 +1,319 @@
-main { flex-grow: 1; }
-.hero { position: relative; height: 45vh; display: flex; align-items: center; justify-content: center; text-align: center; background: url('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat; }
-.hero::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, var(--bg-dark) 0%, rgba(138,43,226,0.3) 50%, var(--bg-dark) 100%); z-index: 1; pointer-events: none; }
-.hero-text { position: relative; z-index: 2; padding: 50px; max-width: 700px; background: radial-gradient(ellipse at center, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 60%, rgba(0,0,0,0) 100%); border: none; box-shadow: none; }
-.hero h2 { font-size: 2.8rem; margin-bottom: 10px; font-weight: bold; text-shadow: 0 0 15px rgba(0,0,0,0.8); }
-.hero p { font-size: 1.1rem; text-shadow: 0 0 10px rgba(0,0,0,0.8); }
+/* =========================================================
+   MAIN (CONTENEDOR PRINCIPAL)
+   ---------------------------------------------------------
+   Permite que el contenido crezca y empuje el footer abajo
+   ========================================================= */
 
-/* Slider */
-.featured-section { padding: 40px 5% 20px 5%; position: relative; }
-.section-title { text-align: center; margin-bottom: 20px; font-size: 1.4rem; font-weight: 300; letter-spacing: 1px; z-index: 2; position: relative; }
-.slider-container { overflow: hidden; position: relative; width: 100%; max-width: 650px; margin: 0 auto; border-radius: 10px; background: rgba(15, 15, 15, 0.8); border: 1px solid rgba(138,43,226, 0.5); box-shadow: 0 5px 20px rgba(0,0,0,0.4); z-index: 2; }
-.slider-track { display: flex; transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1); }
-.slide-card { min-width: 100%; display: flex; flex-direction: row; align-items: center; padding: 15px 20px; gap: 20px; box-sizing: border-box; }
-.slide-img-container { width: 120px; height: 120px; background: #fff; border-radius: 8px; padding: 10px; text-align: center; flex-shrink: 0; }
-.slide-img { width: 100%; height: 100%; object-fit: contain; }
-.slide-info { flex-grow: 1; text-align: left; display: flex; flex-direction: column; justify-content: center; }
-.slide-badge { align-self: flex-start; background: linear-gradient(45deg, var(--neon-pink), var(--neon-purple)); color: white; padding: 3px 10px; border-radius: 15px; font-size: 0.7rem; font-weight: bold; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
-.slide-title { font-size: 1.2rem; margin-bottom: 5px; line-height: 1.1; }
-.slide-desc { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 10px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-.slide-price { font-size: 1.2rem; font-weight: bold; color: var(--neon-pink); margin-bottom: 10px; }
-.btn-small { padding: 8px 15px; font-size: 0.85rem; }
+main {
+    flex-grow: 1;
+}
+
+
+
+/* =========================================================
+   HERO (SECCIÓN PRINCIPAL SUPERIOR)
+   ---------------------------------------------------------
+   Banner principal con imagen de fondo y texto centrado
+   ========================================================= */
+
+.hero {
+
+    /* Posición relativa para overlays (::after) */
+    position: relative;
+
+    /* Altura del hero */
+    height: 45vh;
+
+    /* Centrado de contenido */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* Texto centrado */
+    text-align: center;
+
+    /* Imagen de fondo */
+    background: url('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+}
+
+
+/* 
+   Overlay oscuro con degradado
+   - Mejora la legibilidad del texto
+*/
+.hero::after {
+
+    content: '';
+
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    background: linear-gradient(
+        to bottom,
+        var(--bg-dark) 0%,
+        rgba(138,43,226,0.3) 50%,
+        var(--bg-dark) 100%
+    );
+
+    z-index: 1;
+
+    /* No bloquea clicks */
+    pointer-events: none;
+}
+
+
+
+/* =========================================================
+   TEXTO DEL HERO
+   ========================================================= */
+
+.hero-text {
+
+    /* Encima del overlay */
+    position: relative;
+    z-index: 2;
+
+    padding: 50px;
+
+    max-width: 700px;
+
+    /* Fondo radial para contraste */
+    background: radial-gradient(
+        ellipse at center,
+        rgba(0,0,0,0.85) 0%,
+        rgba(0,0,0,0.4) 60%,
+        rgba(0,0,0,0) 100%
+    );
+
+    border: none;
+    box-shadow: none;
+}
+
+
+/* Título principal */
+.hero h2 {
+    font-size: 2.8rem;
+    margin-bottom: 10px;
+    font-weight: bold;
+    text-shadow: 0 0 15px rgba(0,0,0,0.8);
+}
+
+
+/* Texto descriptivo */
+.hero p {
+    font-size: 1.1rem;
+    text-shadow: 0 0 10px rgba(0,0,0,0.8);
+}
+
+
+
+/* =========================================================
+   SECCIÓN: SLIDER / PRODUCTOS DESTACADOS
+   ========================================================= */
+
+.featured-section {
+
+    padding: 40px 5% 20px 5%;
+
+    position: relative;
+}
+
+
+/* Título de sección */
+.section-title {
+
+    text-align: center;
+    margin-bottom: 20px;
+
+    font-size: 1.4rem;
+    font-weight: 300;
+    letter-spacing: 1px;
+
+    z-index: 2;
+    position: relative;
+}
+
+
+
+/* =========================================================
+   CONTENEDOR DEL SLIDER
+   ========================================================= */
+
+.slider-container {
+
+    overflow: hidden;
+
+    position: relative;
+
+    width: 100%;
+    max-width: 650px;
+
+    margin: 0 auto;
+
+    border-radius: 10px;
+
+    background: rgba(15, 15, 15, 0.8);
+
+    border: 1px solid rgba(138,43,226, 0.5);
+
+    box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+
+    z-index: 2;
+}
+
+
+
+/* Track que se mueve horizontalmente */
+.slider-track {
+
+    display: flex;
+
+    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+
+
+/* =========================================================
+   TARJETA INDIVIDUAL DEL SLIDER
+   ========================================================= */
+
+.slide-card {
+
+    /* Cada slide ocupa el 100% del contenedor */
+    min-width: 100%;
+
+    display: flex;
+
+    flex-direction: row;
+    align-items: center;
+
+    padding: 15px 20px;
+
+    gap: 20px;
+
+    box-sizing: border-box;
+}
+
+
+
+/* Contenedor de imagen */
+.slide-img-container {
+
+    width: 120px;
+    height: 120px;
+
+    background: #fff;
+
+    border-radius: 8px;
+
+    padding: 10px;
+
+    text-align: center;
+
+    /* Evita que se reduzca */
+    flex-shrink: 0;
+}
+
+
+/* Imagen */
+.slide-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+
+
+/* =========================================================
+   INFORMACIÓN DEL SLIDE
+   ========================================================= */
+
+.slide-info {
+
+    flex-grow: 1;
+
+    text-align: left;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+
+
+/* Badge (etiqueta tipo "nuevo", "oferta", etc) */
+.slide-badge {
+
+    align-self: flex-start;
+
+    background: linear-gradient(45deg, var(--neon-pink), var(--neon-purple));
+
+    color: white;
+
+    padding: 3px 10px;
+
+    border-radius: 15px;
+
+    font-size: 0.7rem;
+    font-weight: bold;
+
+    margin-bottom: 8px;
+
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+
+
+/* Título del producto */
+.slide-title {
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+    line-height: 1.1;
+}
+
+
+/* Descripción (limitada a 2 líneas) */
+.slide-desc {
+
+    color: var(--text-muted);
+
+    font-size: 0.85rem;
+
+    margin-bottom: 10px;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+
+    overflow: hidden;
+}
+
+
+/* Precio */
+.slide-price {
+
+    font-size: 1.2rem;
+    font-weight: bold;
+
+    color: var(--neon-pink);
+
+    margin-bottom: 10px;
+}
+
+
+
+/* =========================================================
+   BOTÓN PEQUEÑO
+   ---------------------------------------------------------
+   Variante compacta de botones
+   ========================================================= */
+
+.btn-small {
+    padding: 8px 15px;
+    font-size: 0.85rem;
+}

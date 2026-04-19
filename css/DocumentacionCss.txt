@@ -1,0 +1,367 @@
+# DOCUMENTACION COMPLETA DEL CSS DEL PROYECTO
+
+1. INTRODUCCIÓN GENERAL
+
+---
+
+Este documento explica cómo está organizado TODO el CSS del proyecto, cómo funciona, dónde está cada cosa y cómo modificarlo sin romper nada.
+
+IMPORTANTE:
+
+* Este proyecto usa una arquitectura modular basada en archivos separados.
+* Cada archivo tiene una responsabilidad específica.
+* NO debes mezclar cosas entre archivos sin entender para qué sirve cada uno.
+
+2. ESTRUCTURA DE ARCHIVOS
+
+---
+
+El CSS está dividido en varios archivos dentro de la carpeta:
+
+/css
+
+Estructura:
+
+css/
+│
+├── variables.css
+├── components.css
+├── header-footer.css
+├── cart.css
+├── hero-slider.css
+├── products.css
+└── modals-extra.css
+
+Además, existe un archivo principal que IMPORTA todos estos:
+
+(archivo principal CSS)
+→ Este archivo SOLO conecta todos los demás usando @import
+
+3. ORDEN DE IMPORTACIÓN (MUY IMPORTANTE)
+
+---
+
+El orden en el archivo principal es este:
+
+1. variables.css
+2. components.css
+3. header-footer.css
+4. cart.css
+5. hero-slider.css
+6. products.css
+7. modals-extra.css
+
+Esto NO es casualidad.
+
+Por qué importa:
+
+* variables.css debe ir primero porque define colores y variables
+* components.css define animaciones y utilidades usadas en otros archivos
+* los demás dependen de los anteriores
+
+SI CAMBIAS EL ORDEN:
+→ puedes romper estilos sin darte cuenta
+
+4. VARIABLES GLOBALES (variables.css)
+
+---
+
+Aquí se definen colores y configuraciones globales:
+
+Ejemplo:
+--bg-dark
+--neon-pink
+--text-light
+
+Para qué sirve:
+
+* Evitar repetir colores en todo el proyecto
+* Cambiar el diseño completo desde un solo lugar
+
+Ejemplo práctico:
+Si cambias:
+--neon-pink
+
+Cambias TODOS los elementos que usan ese color.
+
+También incluye:
+
+* Reset global (*)
+* Estilos base del body
+* Scroll personalizado
+
+REGLA:
+NO borrar ni renombrar variables sin revisar todo el proyecto.
+
+5. COMPONENTES Y UTILIDADES (components.css)
+
+---
+
+Contiene:
+
+A) Animaciones
+
+* fadeIn
+* slideInRight
+* pulseFOMO
+* floatBox
+
+Estas animaciones se usan en otros archivos.
+
+Ejemplo:
+animation: fadeIn 0.3s;
+
+B) Clases reutilizables
+
+* .hidden
+* .glass-effect
+* .neon-text
+* .fade-in
+
+C) Sistema de botones
+
+* .btn (base)
+* .btn-primary
+* .btn-secondary
+* .btn-outline
+* .btn-icon
+
+IMPORTANTE:
+Siempre usar .btn como base si es un botón nuevo.
+
+D) Modo SFW
+
+* Aplica blur a imágenes
+* Se activa con:
+  body.sfw-mode
+
+6. HEADER Y FOOTER (header-footer.css)
+
+---
+
+Aquí está todo lo relacionado con:
+
+HEADER:
+
+* barra superior
+* logo
+* botones de navegación
+* badge (contador)
+
+FOOTER:
+
+* estructura en grid
+* contacto
+* redes sociales
+* copyright
+
+IMPORTANTE:
+El header usa position: sticky
+→ se queda fijo arriba
+
+El footer usa:
+margin-top: auto
+→ se queda abajo cuando hay poco contenido
+
+7. CARRITO (cart.css)
+
+---
+
+Controla todo el sistema del carrito lateral.
+
+Partes:
+
+A) Sidebar
+.cart-sidebar
+→ panel que aparece desde la derecha
+
+Se activa con:
+.cart-sidebar.open
+
+B) Productos del carrito
+
+* .cart-item
+* .cart-item-info
+* .cart-item-actions
+
+C) Envíos
+
+* barra de progreso
+* texto dinámico
+
+D) Totales
+
+* subtotal
+* total final
+
+E) Métodos de pago
+
+* tarjetas clickeables
+* estado activo
+
+F) Blind packaging
+
+* sección informativa con animación
+
+IMPORTANTE:
+Mucho de esto depende de JavaScript.
+
+8. HERO Y SLIDER (hero-slider.css)
+
+---
+
+A) HERO
+
+* imagen principal
+* overlay oscuro (::after)
+* texto centrado
+
+B) SLIDER
+
+* contenedor (.slider-container)
+* track (.slider-track)
+* tarjetas (.slide-card)
+
+El slider funciona moviendo:
+transform: translateX(...)
+
+IMPORTANTE:
+El slider depende de JavaScript para moverse.
+
+9. PRODUCTOS (products.css)
+
+---
+
+A) Barra de filtros
+.sticky-filter-bar
+→ se queda fija debajo del header
+
+B) Grid de productos
+.product-grid
+→ usa CSS Grid automático
+
+C) Tarjetas
+.product-card
+
+Incluyen:
+
+* imagen
+* título
+* descripción
+* precio
+* botón wishlist
+
+D) Wishlist
+.btn-wishlist
+→ botón de favoritos
+
+E) Admin controls
+→ botones visibles solo en modo admin
+
+10. MODALES Y EXTRAS (modals-extra.css)
+
+---
+
+A) Inputs globales
+
+* input
+* select
+
+B) Modales
+
+* .modal-overlay
+* .modal-content
+
+Se activa con:
+.modal-overlay.active
+
+C) Reviews
+
+* lista de comentarios
+
+D) Tracker (seguimiento)
+
+* pasos del pedido
+* estados activos
+
+E) Toast notifications
+
+* notificaciones flotantes
+* animaciones automáticas
+
+F) Botón WhatsApp
+
+* flotante en pantalla
+
+11. CÓMO MODIFICAR EL CSS SIN ROMPER TODO
+
+---
+
+REGLAS BÁSICAS:
+
+1. NO cambiar nombres de clases
+   → el HTML depende de eso
+
+2. NO cambiar variables sin revisar
+   → afecta todo el sistema
+
+3. NO mover código entre archivos
+   → cada archivo tiene su responsabilidad
+
+4. SIEMPRE probar cambios
+   → especialmente en responsive
+
+5. Revisar dependencias
+   Ejemplo:
+   animation: fadeIn
+   → viene de components.css
+
+6. CÓMO AGREGAR NUEVOS ESTILOS
+
+---
+
+Paso correcto:
+
+1. Identificar tipo de cambio:
+
+* Es global → variables.css
+* Es reutilizable → components.css
+* Es específico → archivo correspondiente
+
+2. Mantener orden:
+
+* agrupar por sección
+* comentar TODO
+
+3. NO duplicar código
+   → reutilizar clases existentes
+
+4. ERRORES COMUNES
+
+---
+
+* Cambiar el orden de imports
+* Duplicar estilos en varios archivos
+* Usar valores fijos en vez de variables
+* No usar clases existentes
+* Mezclar lógica de diferentes secciones
+
+14. RESUMEN FINAL
+
+---
+
+Este CSS está organizado en:
+
+* VARIABLES → configuración global
+* COMPONENTES → reutilizables
+* SECCIONES → header, carrito, productos, etc
+
+Cada archivo tiene una responsabilidad clara.
+
+Si respetas esto:
+→ el proyecto escala bien
+
+Si no:
+→ se vuelve un caos rápidamente
+
+# FIN DEL DOCUMENTO

@@ -1,31 +1,129 @@
+/* =========================================================
+   VARIABLES GLOBALES (:root)
+   ---------------------------------------------------------
+   Aquí se definen todas las variables reutilizables del proyecto.
+   Esto permite cambiar colores fácilmente sin modificar todo el CSS.
+   
+   IMPORTANTE:
+   - NO cambiar nombres si ya se están usando en otros archivos.
+   - Estas variables afectan TODO el proyecto.
+   ========================================================= */
+
 :root {
+
+    /* Fondo principal de toda la aplicación */
     --bg-dark: #070707;
+
+    /* Fondo de tarjetas, contenedores, etc */
     --bg-card: #121212;
+
+    /* Color principal tipo neón (rosado) */
     --neon-pink: #ff2a75;
+
+    /* Color secundario tipo neón (morado) */
     --neon-purple: #8a2be2;
+
+    /* Color de texto principal (blanco) */
     --text-light: #ffffff;
+
+    /* Color de texto secundario (gris) */
     --text-muted: #888888;
 }
 
-* { 
-    margin: 0; 
-    padding: 0; 
-    box-sizing: border-box; 
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+
+
+/* =========================================================
+   RESET GLOBAL (*)
+   ---------------------------------------------------------
+   Se aplica a TODOS los elementos del HTML.
+   
+   Objetivo:
+   - Eliminar estilos por defecto del navegador
+   - Tener un comportamiento consistente en todos los dispositivos
+   ========================================================= */
+
+* {
+
+    /* Elimina márgenes por defecto */
+    margin: 0;
+
+    /* Elimina padding por defecto */
+    padding: 0;
+
+    /* Hace que el tamaño incluya padding y border */
+    box-sizing: border-box;
+
+    /* Fuente global de la aplicación */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-body { 
-    background-color: var(--bg-dark); 
-    color: var(--text-light); 
-    overflow-x: hidden; 
-    display: flex; 
-    flex-direction: column; 
-    min-height: 100vh; 
+
+
+/* =========================================================
+   ESTILOS BASE DEL BODY
+   ---------------------------------------------------------
+   Configuración principal de la página.
+   ========================================================= */
+
+body {
+
+    /* Color de fondo principal */
+    background-color: var(--bg-dark);
+
+    /* Color de texto por defecto */
+    color: var(--text-light);
+
+    /* Evita scroll horizontal (importante para evitar bugs visuales) */
+    overflow-x: hidden;
+
+    /* Permite usar layout flexible en toda la app */
+    display: flex;
+
+    /* Organiza los elementos en columna */
+    flex-direction: column;
+
+    /* Asegura que el body ocupe toda la pantalla */
+    min-height: 100vh;
 }
 
-body.no-scroll { overflow: hidden; }
 
-/* Scrollbar Global */
-::-webkit-scrollbar { width: 8px; }
-::-webkit-scrollbar-track { background: var(--bg-dark); }
-::-webkit-scrollbar-thumb { background: var(--neon-purple); border-radius: 4px; }
+
+/* =========================================================
+   UTILIDAD: BLOQUEAR SCROLL
+   ---------------------------------------------------------
+   Se usa normalmente cuando hay modales abiertos.
+   ========================================================= */
+
+body.no-scroll {
+    overflow: hidden;
+}
+
+
+
+/* =========================================================
+   SCROLLBAR PERSONALIZADO (WEBKIT)
+   ---------------------------------------------------------
+   Solo funciona en navegadores basados en WebKit:
+   - Chrome
+   - Edge
+   - Safari
+   ========================================================= */
+
+
+/* Ancho de la barra de scroll */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+
+/* Fondo del track (parte de atrás del scroll) */
+::-webkit-scrollbar-track {
+    background: var(--bg-dark);
+}
+
+
+/* Parte que se mueve (thumb) */
+::-webkit-scrollbar-thumb {
+    background: var(--neon-purple);
+    border-radius: 4px;
+}

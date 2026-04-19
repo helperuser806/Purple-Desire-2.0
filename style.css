@@ -1,26 +1,124 @@
-/* ARCHIVO MAESTRO DE IMPORTACION */
+/* =========================================================
+   ARCHIVO MAESTRO DE IMPORTACIÓN
+   ---------------------------------------------------------
+   Este archivo NO contiene estilos principales.
+   Su única función es importar otros archivos CSS.
+   
+   IMPORTANTE:
+   - El orden de los imports SÍ importa.
+   - Cambiar el orden puede romper estilos.
+   ========================================================= */
 
-@import url('css/variables.css');
-@import url('css/components.css');
-@import url('css/header-footer.css');
-@import url('css/cart.css');
-@import url('css/hero-slider.css');
-@import url('css/products.css');
-@import url('css/modals-extra.css');
+@import url('css/variables.css');        /* Variables globales: colores, tamaños, etc */
+@import url('css/components.css');       /* Componentes reutilizables (botones, cards, etc) */
+@import url('css/header-footer.css');    /* Header y Footer */
+@import url('css/cart.css');             /* Carrito de compras */
+@import url('css/hero-slider.css');      /* Slider principal */
+@import url('css/products.css');         /* Sección de productos */
+@import url('css/modals-extra.css');     /* Modales adicionales */
 
 
+/* =========================================================
+   MEDIA QUERIES (RESPONSIVE DESIGN)
+   ---------------------------------------------------------
+   Estas reglas SOLO se aplican en ciertos tamaños de pantalla.
+   NO modifican el diseño base, solo lo adaptan.
+   ========================================================= */
 
-/* REGLAS RESPONSIVE ADICIONALES */
+
+/* ---------------------------------------------------------
+   TABLETS Y PANTALLAS MEDIANAS (<= 768px)
+   ---------------------------------------------------------
+   Ajustes para que los elementos no se vean comprimidos
+   cuando la pantalla es más pequeña.
+   --------------------------------------------------------- */
 @media (max-width: 768px) {
-    .slide-card { flex-direction: column; text-align: center; padding: 15px; gap: 10px; }
-    .slide-info { align-items: center; text-align: center; }
-    .slide-badge { align-self: center; }
+
+    /* 
+       .slide-card
+       - Cambia el layout de horizontal a vertical
+       - Centra el contenido
+       - Reduce el padding y el espacio entre elementos
+    */
+    .slide-card {
+        flex-direction: column;
+        text-align: center;
+        padding: 15px;
+        gap: 10px;
+    }
+
+    /* 
+       .slide-info
+       - Alinea el contenido al centro
+       - Asegura consistencia con .slide-card
+    */
+    .slide-info {
+        align-items: center;
+        text-align: center;
+    }
+
+    /* 
+       .slide-badge
+       - Centra el badge dentro del contenedor
+    */
+    .slide-badge {
+        align-self: center;
+    }
 }
 
+
+/* ---------------------------------------------------------
+   CELULARES PEQUEÑOS (<= 480px)
+   ---------------------------------------------------------
+   Optimización para pantallas muy pequeñas.
+   --------------------------------------------------------- */
 @media (max-width: 480px) {
-    .whatsapp-float { padding: 15px; border-radius: 50%; }
-    .wa-text { display: none; }
+
+    /* 
+       .whatsapp-float
+       - Hace el botón más compacto
+       - Lo vuelve completamente circular
+    */
+    .whatsapp-float {
+        padding: 15px;
+        border-radius: 50%;
+    }
+
+    /* 
+       .wa-text
+       - Oculta el texto para ahorrar espacio
+       - Solo queda el ícono visible
+    */
+    .wa-text {
+        display: none;
+    }
 }
 
-#customAlertModal .modal-content { max-width: 320px; padding: 20px; }
-#alertMessage { font-size: 0.85rem; line-height: 1.4; }
+
+/* =========================================================
+   MODAL PERSONALIZADO (ALERTA)
+   ---------------------------------------------------------
+   Ajustes específicos para un modal en particular.
+   ========================================================= */
+
+
+/* 
+   Contenedor del modal
+   - Limita el ancho máximo
+   - Ajusta el padding interno
+*/
+#customAlertModal .modal-content {
+    max-width: 320px;
+    padding: 20px;
+}
+
+
+/* 
+   Mensaje dentro del modal
+   - Reduce el tamaño de fuente
+   - Mejora la legibilidad con line-height
+*/
+#alertMessage {
+    font-size: 0.85rem;
+    line-height: 1.4;
+}
