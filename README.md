@@ -1,175 +1,290 @@
-**Documentación Técnica y Funcional del Proyecto**
+# Documentación Técnica y Funcional del Proyecto
 
+## Sistema de E-Commerce: "Purple Desire"
 
-**Sistema de E-Commerce: "Purple Desire"**
+**Tipo de Proyecto:** Aplicación Web de Comercio Electrónico (Boutique Sensual Anónima)  
+**Tecnologías:** HTML5, CSS3, Vanilla JavaScript (DOM & LocalStorage)
 
+---
 
-**Tipo de Proyecto:** Aplicación Web de Comercio Electrónico (Boutique Sensual Anónima)
-**Tecnologías:** HTML5, CSS3, Vanilla JavaScript (DOM & LocalStorage).
+## 1. Introducción y Justificación del Proyecto
 
+"Purple Desire" es un prototipo funcional de una tienda en línea enfocada en la venta de productos de bienestar adulto, lencería y juguetes.
 
-**1. Introducción y Justificación del Proyecto**
+### Problema a resolver
+El principal obstáculo en esta industria es:
+- Vergüenza al comprar
+- Falta de privacidad
+- Miedo al juicio social
 
+### Solución propuesta
+Se diseñó una plataforma basada en:
+- Navegación anónima
+- Interfaz discreta
+- Experiencia centrada en privacidad
 
-"Purple Desire" es el prototipo funcional de una tienda en línea orientada a la venta de productos de
-bienestar adulto, lencería y juguetes.
+El objetivo es reducir la fricción de compra y aumentar la confianza del usuario.
 
+---
 
-**Problema a resolver:** El principal obstáculo en la industria del bienestar adulto es la fricción
-generada por la vergüenza, la falta de privacidad y el miedo al escrutinio social.
-**Solución propuesta:** Se diseñó una plataforma bajo la premisa de "Privacidad Extrema". Desde la
-navegación anónima hasta la garantía de empaque ciego, la interfaz está pensada para reducir la
-fricción de compra mediante el anonimato y generar confianza a través de una Experiencia de Usuario
-(UX) inmersiva y discreta.
+## 2. Tecnologías Utilizadas
 
+El proyecto sigue un enfoque **Vanilla Web Development**, sin frameworks.
 
-**2. Tecnologías Utilizadas**
+- **HTML5**
+  - Estructura completa de la aplicación
+  - Uso de modales, formularios y secciones semánticas
 
+- **CSS3**
+  - Diseño responsive
+  - Variables globales (`:root`)
+  - Animaciones y efectos visuales (Glassmorphism, neón)
 
-El proyecto se desarrolló bajo el paradigma de _Vanilla Web Development_ (sin frameworks ni librerías
-pesadas) para garantizar un rendimiento óptimo y demostrar el dominio absoluto de los fundamentos
-de la web:
+- **JavaScript (ES6+)**
+  - Lógica completa de la aplicación
+  - Manipulación del DOM
+  - Eventos
+  - Persistencia con LocalStorage
 
+- **FontAwesome**
+  - Iconos visuales para mejorar la UI
 
-  - **HTML5:** Estructuración semántica de la información y modales (ventanas emergentes).
+---
 
+## 3. Arquitectura del Proyecto (Modular)
 
-  - **CSS3:** Diseño responsivo (Mobile-First), animaciones fluidas (keyframes), variables
-globales (:root) para un esquema de colores Dark Mode/Neón y efectos visuales de cristal
-( _Glassmorphism_ ).
+El proyecto está dividido en **módulos independientes**, cada uno con una responsabilidad clara.
 
+### Estructura general
 
-  - **JavaScript (ES6+):** Lógica de negocio, manipulación dinámica del DOM, gestión de
-eventos y almacenamiento persistente del lado del cliente.
 
+/PURPLE-DESIRE-2.0
+│
+├── index.html
+├── style.css
+├── app.js
+│
+├── /js
+│ ├── config.js
+│ ├── ui.js
+│ ├── productos.js
+│ ├── carrito.js
+│ ├── DocumentacionJs.txt
+│
+├── /css
+│ ├── variables.css
+│ ├── components.css
+│ ├── header-footer.css
+│ ├── cart.css
+│ ├── hero-slider.css
+│ ├── products.css
+│ ├── modals-extra.css
+│ ├── DocumentacionCss.txt
+│
+├── /images
+└── /payment
 
-  - **FontAwesome:** Sistema de iconografía vectorial para mejorar la interfaz visual.
 
+---
 
-**3. Arquitectura de Almacenamiento (Persistencia de Datos)**
+## 4. Documentación por Módulos
 
+Cada módulo del sistema tiene su propia documentación detallada en archivos `.txt`.
 
-Para simular una base de datos real sin necesidad de un backend o servidor, el sistema utiliza la API
-de **LocalStorage** del navegador. Los datos se almacenan en formato JSON y se
-serializan/deserializan de forma síncrona.
+### Importante
+- **DocumentacionCss.txt**
+  - Explica toda la organización del CSS
+  - Cómo modificar estilos
+  - Cómo funcionan las clases
 
+- **DocumentacionJs.txt**
+  - Explica toda la lógica de JavaScript
+  - Flujo completo de la aplicación
+  - Interacción entre módulos
 
-  - pd_products_cop: Almacena el catálogo de productos (CRUD de administrador).
+Esto permite que cualquier persona pueda entender el proyecto módulo por módulo sin necesidad de leer todo el código.
 
+---
 
-  - pd_cart_cop: Almacena el estado del carrito de compras (productos, cantidades).
+## 5. Arquitectura de Almacenamiento (Persistencia de Datos)
 
+Se utiliza **LocalStorage** para simular una base de datos.
 
-  - pd_wishlist: Guarda un array con los IDs de los productos favoritos del usuario.
+### Claves utilizadas
 
+- `pd_products_cop`
+  - Guarda todos los productos (incluyendo los creados por admin)
 
-  - isAdultVerified: Variable de sessionStorage que guarda el estado de la verificación de
-mayoría de edad (se reinicia al cerrar el navegador).
+- `pd_cart_cop`
+  - Guarda el carrito de compras
 
+- `pd_wishlist`
+  - Guarda productos favoritos
 
-**4. Módulos y Funcionalidades Principales**
+- `isAdultVerified` (sessionStorage)
+  - Guarda si el usuario confirmó ser mayor de edad
 
+---
 
-**A. Módulo de Autenticación y Privacidad**
+## 6. Módulos y Funcionalidades Principales
 
-  - **Verificación de Edad (+18):** Modal restrictivo al inicio. Bloquea el scroll y obliga al usuario
-a confirmar su edad. Si rechaza, es redirigido fuera del sitio por seguridad.
+### A. Módulo de Inicialización (app.js)
 
+Es el **orquestador principal**:
+- Espera a que cargue el DOM
+- Inicializa:
+  - Productos
+  - Carrito
+  - Wishlist
+  - Carrusel
+- Ejecuta verificaciones (edad)
 
-  - **Navegación de Incógnito:** Sistema que permite crear "Perfiles Desechables" (Alias
-generados aleatoriamente vía JS) o navegar como Invitado, evitando la solicitud de datos
-personales invasivos.
+---
 
-**B. Módulo de Catálogo y Búsqueda**
+### B. Módulo de Configuración (config.js)
 
-  - **Renderizado Dinámico:** Los productos se inyectan dinámicamente en el DOM leyendo el
-array principal.
+Contiene:
+- Estado global:
+  - Usuario
+  - Carrito
+  - Wishlist
+  - Categoría activa
+- Datos base:
+  - Lista de productos por defecto
 
+Es la "base de datos" del sistema.
 
-  - **Filtros en Tiempo Real:** Barra _sticky_ que permite filtrar productos por categoría (Juguetes,
-Lencería, Bienestar), búsqueda por texto (nombre/descripción) y ordenamiento por precio.
+---
 
+### C. Módulo de Interfaz (ui.js)
 
-  - **Vista Rápida:** Modal que amplía la información del producto, mostrando precio, descripción
-detallada y permitiendo la adición directa al carrito.
+Controla:
+- Modales (abrir/cerrar)
+- Toasts (notificaciones)
+- Alertas personalizadas
+- Carrusel de productos
+- Modo discreto (SFW)
 
-**C. Módulo E-Commerce (Carrito y Wishlist)**
+Es el encargado de todo lo visual dinámico.
 
-  - **Carrito de Compras Lateral:** Panel tipo _Off-canvas_ que calcula en tiempo real subtotal,
-impuestos (10%) y envío.
+---
 
+### D. Módulo de Productos (productos.js)
 
-  - **Barra Dinámica de Envío Gratis (Gamificación):** Calcula la diferencia entre el subtotal y
-la meta ($150.000 COP). Muestra una barra de progreso visual (CSS) que se torna verde al
-alcanzar el objetivo, incentivando el aumento del ticket promedio.
+Responsable de:
+- Renderizar productos en pantalla
+- Filtrar productos:
+  - Por categoría
+  - Por texto
+- Ordenar productos por precio
+- CRUD de productos (admin)
 
+---
 
-  - **Wishlist (Tus Secretos):** Sistema de favoritos donde el usuario puede guardar productos
-discretamente para una compra futura.
+### E. Módulo de Carrito (carrito.js)
 
-**D. Módulo de Checkout y Rastreo**
+Controla:
+- Agregar productos al carrito
+- Cambiar cantidades
+- Eliminar productos
+- Cálculo de:
+  - Subtotal
+  - Impuestos
+  - Envío
+  - Total
 
+También incluye:
+- Wishlist
+- Checkout
+- Autenticación básica (alias)
 
-  - **Modal de Pago Seguro:** Formulario de pago simulado que destaca visualmente la promesa
-de "Empaque Ciego Garantizado".
+---
 
+## 7. Flujo General de la Aplicación
 
-  - **Simulador de Rastreo (Fake Tracker):** Herramienta en el footer que permite ingresar un
-código de guía (generado tras la compra) y simula, mediante eventos asíncronos
-(setTimeout), los estados de entrega segura de un paquete anónimo.
+1. Carga la página
+2. Se ejecuta `app.js`
+3. Se valida edad
+4. Se renderizan productos
+5. Usuario interactúa:
+   - Filtra
+   - Agrega al carrito
+   - Guarda en wishlist
+6. Puede hacer checkout
+7. Se simula pago y rastreo
 
-**E. Módulo de Administración (CRUD)**
+---
 
-  - Panel oculto que se activa al iniciar sesión con la palabra clave "admin". Permite crear, editar
-y eliminar productos directamente desde la interfaz, actualizando el localStorage en tiempo
-real.
+## 8. Estrategias de Psicología de Ventas
 
+El sistema incluye técnicas de marketing:
 
-**5. Estrategias de Psicología de Ventas Integradas**
+### 1. FOMO (Urgencia)
+- Mensajes como:
+  - "Últimas unidades"
+- Generados dinámicamente
 
+### 2. Prueba Social
+- Reseñas simuladas
+- Usuarios anónimos
 
-El código no solo cumple funciones técnicas, sino que incorpora "Gatillos Mentales" (Mental
-Triggers) fundamentales en el marketing digital:
+### 3. Refuerzo positivo
+- Toasts
+- Alertas visuales
 
+---
 
-1. **Efecto FOMO (Fear Of Missing Out):** Un algoritmo matemático en JavaScript calcula
+## 9. Diseño Responsivo
 
-ciertos IDs de productos para mostrarles aleatoriamente etiquetas parpadeantes de _"¡Últimas_
-_X unidades!"_, creando sentido de urgencia en el comprador.
+- Uso de:
+  - Flexbox
+  - CSS Grid
+- Adaptable a:
+  - Móviles
+  - Tablets
+  - Escritorio
 
+---
 
-2. **Prueba Social (Social Proof):** En la vista detallada de los productos, JS genera
+## 10. Características Especiales
 
-dinámicamente estrellas ( ⭐⭐⭐⭐⭐ ) y reseñas con perfiles anónimos ( _Ej:_
-_Agent_4091_ ) que confirman la calidad y discreción del envío, lo que destruye las objeciones
-de compra.
+- Navegación anónima
+- Empaque ciego (concepto UX)
+- Carrito lateral dinámico
+- Barra de progreso de envío
+- Modal de rastreo simulado
+- Panel de administración oculto
 
+---
 
-3. **Aseguramiento de Expectativas:** Notificaciones visuales (Toasts y Alertas Personalizadas)
+## 11. Mantenibilidad y Escalabilidad
 
-que felicitan al usuario por su acción y le reafirman que su envío llegará sin logotipos y a una
-dirección secreta.
+El proyecto está preparado para crecer:
 
+- Código modular
+- Separación de responsabilidades
+- Cada archivo tiene una función clara
+- Documentación independiente por módulo
 
-**6. Diseño Responsivo y Accesibilidad**
+Esto permite:
+- Agregar nuevas funcionalidades fácilmente
+- Cambiar partes sin romper otras
+- Entender el sistema rápidamente
 
-  - El diseño está construido con Flexbox y CSS Grid, adaptándose perfectamente a pantallas
-móviles, tablets y monitores de escritorio.
+---
 
+## 12. Conclusión
 
-  - El sistema incluye un botón flotante de WhatsApp pre-configurado para soporte anónimo
-inmediato.
+"Purple Desire" no es solo una tienda, es una demostración de:
 
+- Arquitectura modular en frontend
+- Manejo completo del DOM
+- Persistencia sin backend
+- Diseño UX enfocado en privacidad
 
-  - Gestión de Z-index y overflow: hidden para que los modales (ventanas emergentes) bloqueen
-el scroll del fondo, focalizando la atención del usuario al 100% en la acción actual (pago,
-edad, detalles).
+Combina:
+- Desarrollo técnico sólido
+- Diseño centrado en usuario
+- Estrategias de conversión
 
-
-**7. Conclusión**
-
-
-El proyecto "Purple Desire" demuestra una implementación integral de desarrollo Front-end.
-Resuelve un problema de negocio real combinando algoritmos técnicos limpios (manipulación del
-DOM, filtrado de arrays, LocalStorage) con una comprensión profunda del viaje del usuario (UX) y
-embudos de conversión (estrategias de venta).
+Es un proyecto completo a nivel de frontend que simula un sistema real de e-commerce.
