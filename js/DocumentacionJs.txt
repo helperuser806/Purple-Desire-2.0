@@ -1,0 +1,343 @@
+# DOCUMENTACION COMPLETA DEL JAVASCRIPT DEL PROYECTO
+
+1. INTRODUCCIÓN GENERAL
+
+---
+
+Este documento explica TODO el funcionamiento del JavaScript del proyecto.
+
+Aquí se cubre:
+
+* Cómo están organizados los archivos
+* Qué hace cada archivo
+* Cómo se comunican entre sí
+* Cómo modificar el sistema sin romperlo
+
+IMPORTANTE:
+Este proyecto usa JavaScript SIN módulos (todo es global).
+Eso significa que:
+→ todos los archivos comparten variables y funciones
+
+Si no entiendes esto:
+→ vas a romper cosas sin darte cuenta
+
+2. ESTRUCTURA DE ARCHIVOS JS
+
+---
+
+Los archivos principales son:
+
+/js
+│
+├── config.js
+├── ui.js
+├── productos.js
+└── carrito.js
+
+Cada archivo tiene una responsabilidad específica.
+
+3. ORDEN DE CARGA (CRÍTICO)
+
+---
+
+El orden en el HTML debe ser ESTE:
+
+1. config.js
+2. productos.js
+3. carrito.js
+4. ui.js
+5. app.js
+
+Por qué:
+
+* config.js define datos (products, cart, etc)
+* productos.js usa products
+* carrito.js usa cart y products
+* ui.js usa funciones globales
+* app.js inicia todo
+
+SI CAMBIAS EL ORDEN:
+→ funciones no existirán
+→ la app se rompe
+
+4. ARCHIVO: config.js (BASE DEL SISTEMA)
+
+---
+
+Este archivo define TODO el estado global:
+
+* currentUserRole
+* currentAlias
+* cart
+* wishlist
+* categoriaActual
+* products
+
+También contiene:
+
+* defaultProducts (base de datos inicial)
+
+IMPORTANTE:
+
+products funciona así:
+
+1. Intenta cargar desde localStorage
+2. Si no hay datos → usa defaultProducts
+
+Esto significa:
+→ los datos persisten en el navegador
+
+SI BORRAS localStorage:
+→ vuelven los productos por defecto
+
+5. ARCHIVO: app.js (ORQUESTADOR)
+
+---
+
+Este archivo inicia la aplicación.
+
+Se ejecuta cuando el DOM está listo:
+
+Hace lo siguiente:
+
+1. Resetea scroll
+2. Verifica edad (modal)
+3. Renderiza productos
+4. Actualiza carrito
+5. Actualiza wishlist
+6. Inicia carrusel
+
+También agrega listeners globales para:
+
+* búsqueda
+* orden
+
+IMPORTANTE:
+No contiene lógica compleja
+→ solo coordina todo
+
+6. ARCHIVO: ui.js (INTERFAZ)
+
+---
+
+Controla todo lo visual:
+
+* Modales
+* Toasts (notificaciones)
+* Carrusel
+* Modo SFW
+
+A) Verificación de edad
+Muestra un modal si no se ha validado
+
+B) Modo SFW
+Oculta imágenes usando CSS
+
+C) Toasts
+Mensajes temporales (3 segundos)
+
+D) Alertas personalizadas
+Modales con mensajes
+
+E) Carrusel
+Muestra productos destacados automáticamente
+
+IMPORTANTE:
+Este archivo modifica el DOM directamente
+
+7. ARCHIVO: productos.js (CATÁLOGO)
+
+---
+
+Este archivo controla:
+
+* Render de productos
+* Filtros
+* CRUD de productos (admin)
+
+A) renderProducts()
+Pinta los productos en pantalla
+
+B) Filtros
+
+* búsqueda (input)
+* categoría (botones)
+* orden (select)
+
+C) Wishlist visual
+Cambia icono de corazón
+
+D) Admin (CRUD)
+
+* crear producto
+* editar producto
+* eliminar producto
+
+IMPORTANTE:
+Aquí se actualiza localStorage cuando cambian productos
+
+8. ARCHIVO: carrito.js (SISTEMA DE COMPRA)
+
+---
+
+Este archivo controla:
+
+* Carrito
+* Wishlist lógica
+* Checkout
+* Login simple
+
+A) Carrito
+
+* agregar producto
+* eliminar producto
+* cambiar cantidad
+
+B) Persistencia
+Se guarda en localStorage:
+pd_cart_cop
+
+C) UI del carrito
+Se recalcula:
+
+* subtotal
+* total
+* envío
+* cantidad
+
+D) Wishlist
+Se guarda en:
+pd_wishlist
+
+E) Checkout
+Simula un pago:
+
+* muestra código aleatorio
+* limpia carrito
+
+F) Login
+
+* alias simple
+* "admin" activa modo admin
+
+IMPORTANTE:
+No es seguro (solo visual)
+
+9. FLUJO COMPLETO DE LA APP
+
+---
+
+Cuando cargas la página:
+
+1. config.js carga datos
+2. app.js inicia todo
+3. productos.js renderiza catálogo
+4. carrito.js sincroniza carrito
+5. ui.js activa efectos
+
+Cuando el usuario interactúa:
+
+* Click producto → agregarAlCarrito()
+* Buscar → aplicarFiltros()
+* Cambiar categoría → filtrar()
+* Comprar → abrirCheckout()
+
+10. USO DE localStorage
+
+---
+
+Se usan estas claves:
+
+* pd_cart_cop → carrito
+* pd_wishlist → favoritos
+* pd_products_cop → productos
+
+Formato:
+JSON.stringify() para guardar
+JSON.parse() para leer
+
+IMPORTANTE:
+Si algo falla:
+→ revisar localStorage primero
+
+11. VARIABLES GLOBALES IMPORTANTES
+
+---
+
+Estas variables son compartidas entre archivos:
+
+* products
+* cart
+* wishlist
+* categoriaActual
+* currentUserRole
+
+NO crear variables con los mismos nombres
+→ rompe la app
+
+12. CÓMO MODIFICAR EL SISTEMA
+
+---
+
+REGLAS CLAVE:
+
+1. NO cambiar nombres de funciones globales
+   → están conectadas al HTML
+
+2. NO cambiar IDs del DOM
+   → los scripts dependen de ellos
+
+3. SIEMPRE actualizar localStorage si cambias datos
+
+4. Mantener responsabilidades:
+
+* UI → ui.js
+* lógica productos → productos.js
+* carrito → carrito.js
+
+5. Probar todo después de cambios
+
+6. ERRORES COMUNES
+
+---
+
+* Cambiar orden de scripts
+* Romper nombres de funciones
+* No validar elementos del DOM
+* No actualizar localStorage
+* Mezclar lógica entre archivos
+
+14. LIMITACIONES ACTUALES
+
+---
+
+Este sistema:
+
+* NO usa módulos (todo es global)
+* NO usa backend
+* NO tiene seguridad real
+* NO valida datos
+
+Esto es normal para un proyecto pequeño
+
+15. RESUMEN FINAL
+
+---
+
+El sistema funciona así:
+
+config.js → datos
+app.js → arranque
+ui.js → interfaz
+productos.js → catálogo
+carrito.js → compra
+
+Todo está conectado globalmente.
+
+Si respetas la estructura:
+→ funciona bien
+
+Si no:
+→ se rompe rápido
+
+# FIN DEL DOCUMENTO
