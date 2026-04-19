@@ -1,0 +1,31 @@
+:root {
+    --bg-dark: #070707;
+    --bg-card: #121212;
+    --neon-pink: #ff2a75;
+    --neon-purple: #8a2be2;
+    --text-light: #ffffff;
+    --text-muted: #888888;
+}
+
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+}
+
+body { 
+    background-color: var(--bg-dark); 
+    color: var(--text-light); 
+    overflow-x: hidden; 
+    display: flex; 
+    flex-direction: column; 
+    min-height: 100vh; 
+}
+
+body.no-scroll { overflow: hidden; }
+
+/* Scrollbar Global */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-dark); }
+::-webkit-scrollbar-thumb { background: var(--neon-purple); border-radius: 4px; }

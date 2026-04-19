@@ -1,0 +1,16 @@
+header { height: 75px; display: flex; justify-content: space-between; align-items: center; padding: 0 5%; background: rgba(5, 5, 5, 0.95); backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid #1a1a1a; }
+.logo h1 { font-size: 1.8rem; font-weight: 300; letter-spacing: 2px; }
+.nav-btn { background: none; border: none; color: var(--text-light); font-size: 1.1rem; margin-left: 20px; cursor: pointer; transition: 0.3s; position: relative; }
+.nav-btn:hover { color: var(--neon-pink); text-shadow: 0 0 8px var(--neon-pink); }
+.badge { background: var(--neon-pink); color: white; border-radius: 50%; padding: 2px 6px; font-size: 0.75rem; position: absolute; top: -8px; right: -12px; font-weight: bold; }
+
+.site-footer { background-color: #040404; border-top: 1px solid #1a1a1a; padding: 40px 5% 20px 5%; margin-top: auto; }
+.footer-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; margin-bottom: 30px; }
+.footer-brand h2 { font-size: 1.5rem; letter-spacing: 1px; margin-bottom: 10px; }
+.footer-brand p { color: var(--text-muted); font-size: 0.9rem; }
+.footer-contact h3, .footer-social h3 { color: var(--text-light); margin-bottom: 15px; font-size: 1.1rem; }
+.footer-contact p { color: var(--text-muted); margin-bottom: 10px; font-size: 0.9rem; display: flex; align-items: center; gap: 10px; }
+.social-icons { display: flex; gap: 15px; }
+.social-icons a { color: var(--text-muted); font-size: 1.5rem; transition: 0.3s; }
+.social-icons a:hover { color: var(--neon-pink); transform: translateY(-3px); }
+.footer-bottom { text-align: center; border-top: 1px solid #222; padding-top: 20px; color: #555; font-size: 0.8rem; }
