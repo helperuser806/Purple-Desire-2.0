@@ -18,6 +18,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Servir archivos estáticos del frontend (CSS, JS, imágenes, etc.)
+// En Vercel, el frontend se sirve como estático, pero mantenemos esto para desarrollo local
 app.use(express.static(path.join(__dirname, '..', 'frontend')));
 
 // Rutas de la API
@@ -43,11 +44,13 @@ app.use((req, res) => {
     });
 });
 
-const PORT = process.env.PORT || 5000;
+// Exportar la app para Vercel
+module.exports = app;
 
-app.listen(PORT, () => {
-    console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
-    console.log(`📦 API: http://localhost:${PORT}/api`);
-    console.log(`🏪 Tienda: http://localhost:${PORT}`);
-    console.log(`👨‍💼 Panel Vendedor: http://localhost:${PORT}/vendor`);
-});
+// Solo escuchar si no estamos en producción (o si se ejecuta directamente)
+if (process.env.NODE_ENV !== 'production') {
+    const PORT = process.env.PORT || 5000;
+    app.listen(PORT, () => {
+        console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
+    });
+}
